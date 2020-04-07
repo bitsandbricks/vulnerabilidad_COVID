@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+      <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        h2, h3 {
+            margin: 10px;
+            font-size: 1.2em;
+        }
+        h3 {
+            font-size: 1em;
+        }
+        p {
+            font-size: 0.85em;
+            margin: 10px;
+            text-align: left;
+        }
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            margin-right: 20px;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+        }
+        #map {
+            position:absolute;
+            top:0;
+            bottom:0;
+            width:100%;
+        }
+        #features {
+            top: 0;
+            height: 100%;
+            margin-top: 20px;
+            width: 200px;
+        }
+
+    </style>
+</head>
+<body>
+<style>
+    #logoContainer {
+            position: absolute;
+            right: 15px
+        }
+        
+    .legend-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            margin-right: 20px;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+        }
+    #legend {
+            padding: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+            line-height: 18px;
+            height: 170px;
+            margin-bottom: 40px;
+            width: 150px;
+        }
+     .legend-key {
+            display:inline-block;
+            border-radius: 20%;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+            margin-left: 10px
+        }
+</style>
+
+<div id='map'></div>
+<div class='map-overlay' id='features'><h2>COVID-19: Población mayor de 60 años y distancia a pie hasta centros de salud</h2><div id='pd'><p><b>La altura de cada celda refleja el número de residentes mayores a 60 años.</b></br ></br >Fuentes:</br ></br ><a href="https://data.humdata.org/organization/facebook">Facebook High Resolution Demographic Estimates, Humanitarian Data Exchange</a></br ><a href="https://www.openstreetmap.org/"></br >OpenStreetMap</a></br ></br ><br/>Código de procesamiento disponible <a href = "https://vulnerabilidad-codigo.netlify.com/">aquí</a></br ></br >Este mapa se encuentra en desarrollo. Para consultas, por favor escribir a <a href="mailto:pzambrano@iadb.org">digital_cities@iadb.org</a></p></div></div>
+<div class='legend-overlay' id='legend'><strong><h3>tiempo de viaje</h3></strong></div>
+<div id="logoContainer"><img src="BID_logo.png"></div>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.0.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.0.0/mapbox-gl-geocoder.css' type='text/css' />
+
+<script>
+
+// define access token
+mapboxgl.accessToken = 'pk.eyJ1IjoiaGF2YiIsImEiOiJpSHhUWGVBIn0.IY5RvkA4-jqVtNxcsYioug';
+
+//create map
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/havb/ck8ajsl0t14m01ipfoizwegja', // map style URL from Mapbox Studio
+    center: [-78.5, -0.14],
+    zoom: 10,
+    minZoom: 10,
+    pitch: 45
+});
+
+//map.addControl(new MapboxGeocoder({
+//    accessToken: mapboxgl.accessToken,
+    // limit results to Ecuador
+//    countries: 'ec',
+//   
+//    mapboxgl: mapboxgl
+//}));
+
+// wait for map to load before adjusting it
+map.on('load', function() {
+
+    // make a pointer cursor
+    map.getCanvas().style.cursor = 'default';
+
+    // set map bounds to ARGGG
+    // map.fitBounds([[-73.6, -55.2], [-53.6, -21.8]]);
+
+    // define layer names
+    // breaks: -5.446, -4.3, -3.154, -2.008, -0.862, -0.284
+    var layers = [" 0' a 15'", "15' a 30'", "30' a 45'", "45' a 1h'", " 1h a 1h30'", " 1h a 2h", "más de 2h"];
+    var colors = ["#2B83BA", "#80BFAB", "#C7E8AD", "#FFFFBF", "#FEC980", "#F07C4A", "#D7191C"];
+
+
+    // create legend
+    for (i=0; i<layers.length; i++) {
+        var layer = layers[i];
+        var color = colors[i];
+        var item = document.createElement('div');
+        var key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        var value = document.createElement('span');
+        value.innerHTML = layer;
+        item.appendChild(key);
+        item.appendChild(value);
+        legend.appendChild(item);
+    }
+
+
+});
+
+</script>
+
+</body>
+</html>

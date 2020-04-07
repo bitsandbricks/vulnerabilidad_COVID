@@ -28,6 +28,9 @@ En esta instancia se utilizarán solo fuentes abiertas con cobertura global, de 
 
 Esta prueba de concepto toma a Quito, Ecuador, como ubicación a analizar.
 
+</br>
+__Mapa online con los resultados: https://vulnerabilidad.netlify.com __
+</br>
 
 ## Fuentes de datos 
 
@@ -630,4 +633,5 @@ celdas %>%
 ```{r echo=FALSE}
 #st_write(celdas, "data/celdas_quito.geojson", delete_dsn = TRUE)
 ```
+
 
