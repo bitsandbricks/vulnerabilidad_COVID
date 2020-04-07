@@ -1,11 +1,18 @@
 ---
-title: "Mapa de Vulnerabilidad / COVID-19 - Prueba de concepto"
-author: "Antonio Vázquez Brust"
+title: "Mapa de Vulnerabilidad / COVID-19"
+subtitle:  "Prueba de concepto"
+author: "BID - División de Desarrollo Urbano y Vivienda. Consultas: digital_cities@iadb.org"
 date: "3/25/2020"
 output:
   html_document:
     df_print: paged
 ---
+
+```{r, echo=FALSE}
+htmltools::img(src = knitr::image_uri("img/BID_logo_small.png"), 
+               alt = 'logo', 
+               style = 'position:absolute; top:0; right:0; padding:10px;')
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
@@ -17,7 +24,7 @@ Realizar mapas con la mayor granularidad posible, a escala intraurbana, de vulne
 
 Con ello se busca contribuir en la toma de decisiones por parte de entidades municipales para la planificación y distribución de atención a nivel intraurbano (víveres con bancos de comida, atención médica in situ, etc.).
 
-En esta instancia se utilizarán solo fuentes abiertas con cvertura global, de modo que el procedimeinto sea reproducible en cualquer ciudad de Latinoamérica sin requerir fuentes locales específicas. Por supuesto, los datos locales de gran valor y podrán ser incorporados a éste procedimiento para refinar o extender los resultados.
+En esta instancia se utilizarán solo fuentes abiertas con cobertura global, de modo que el procedimiento sea reproducible en cualquier ciudad de Latinoamérica sin requerir fuentes locales específicas. Por supuesto, los datos locales de gran valor y podrán ser incorporados a éste procedimiento para refinar o extender los resultados.
 
 Esta prueba de concepto toma a Quito, Ecuador, como ubicación a analizar.
 
@@ -34,6 +41,7 @@ Esta prueba de concepto toma a Quito, Ecuador, como ubicación a analizar.
 library(tidyverse) # funciones útiles en general para manipulación y visualización
 library(sf) # para datos georeferenciados en formato vectorial
 library(osmdata) # para acceso a datos de OpenStreetMap
+library(osrm) # para calcular rutas a pie utilizando la grilla de calles local
 library(leaflet) # para visualización de datos geográficos
 library(nngeo) # para identificar elementos próximos en el espacio  
                # No disponible en CRAN, usar devtools::install_github("michaeldorman/nngeo")
@@ -57,7 +65,7 @@ zipfile <- tempfile()
 download.file(url, zipfile)
 filename <- unzip(zipfile, list = TRUE)$Name
 
-densidad <- read_csv(unz(zipfile, filename))
+poblacion <- read_csv(unz(zipfile, filename))
 
 unlink(temp)
 
@@ -110,9 +118,9 @@ Debido a la infinidad de marcos territoriales y legales que existen en el mundo 
 
 Nominatim es una base de datos global de nombres propios de lugares. Al realizarse una búsqueda, por ejemplo por "Quito", se encuentran distintas entidades geográficas con ese nombre. La interfaz de Nominatim permite comparar opciones y verificar los límites en el mapa, identificando la entidad buscada. 
 
-En este caso, buscando por "Quito, Ecuador", el resultado deseado es el quinto resultado: _Quito, Pichincha, Ecuador (County)_, que coincide con los límites visibles en el SIG de la secretaría de Territorio de QUito
+En este caso, buscando por "Quito, Ecuador", el resultado deseado es el quinto resultado: _Quito, Pichincha, Ecuador (County)_, que coincide con los límites visibles en el SIG de la secretaría de Territorio de Quito
 
-```{r out.width="800px"}
+```{r out.width="800px", echo=FALSE}
 knitr::include_graphics("img/secretaria_territorio_quito.png")
 ```
 
@@ -160,7 +168,7 @@ bbox <- matrix(st_bbox(limites), nrow = 2, dimnames = list(c("x", "y"), c("min",
 bbox
 ```
 
-Para descargar entidades georeferenciadas se requiere conocer las palabras clave con las que se identifican los registros en la base de OSM. Existe gran detalle para el tipo de datos georeferenciados disponbles: áreas de parques públicos, posición de oficinas de correo o cajeros automáticos, vías de ferrocarril, etc. La nomenclatura se puede consultar en https://wiki.openstreetmap.org/wiki/Map_Features
+Para descargar entidades georeferenciadas se requiere conocer las palabras clave con las que se identifican los registros en la base de OSM. Existe gran detalle para el tipo de datos georeferenciados disponibles: áreas de parques públicos, posición de oficinas de correo o cajeros automáticos, vías de ferrocarril, etc. La nomenclatura se puede consultar en https://wiki.openstreetmap.org/wiki/Map_Features
 
 En este caso vamos a solicitar todas las vías de circulación (calles, avenidas, autopistas, etc) de la ciudad. En la base de datos de OSM ciertas entidades agrupadas bajo la categoría "Healthcare" resultan de inmediato interés:
 
@@ -184,20 +192,28 @@ hospitales <-  opq(bbox) %>%
   osmdata_sf() 
 ```
 
-Dependiendo del nivel de detalle con el que hayan sido registrados, la mayoría de las clínicas y hospitales están representadas por puntos, pero en algunos casos por los polígonos de su planta. Para nuestros fines sólo necesitamos los puntos. Convertiremos los polígonos en puntos tomando su centroide.
+Dependiendo del nivel de detalle con el que hayan sido registrados, la mayoría de las clínicas y hospitales están representados por puntos, pero en algunos casos por los polígonos de su planta. Para nuestros fines sólo necesitamos los puntos. Convertiremos los polígonos en puntos, tomando su centroide.
 
 ```{r eval=FALSE}
 todo_a_puntos <- function(osm_query_sf) {
   
-  puntos <- select(osm_query_sf$osm_points, "name")
-  centroides_poly <- st_centroid(select(osm_query_sf$osm_polygons, "name"))
-  centroides_multipoly <- st_centroid(select(osm_query_sf$osm_multipolygons, "name"))
 
-  todo <- rbind(puntos, centroides_poly, centroides_multipoly)
+  # extraemos los elementos de la lista que refieren a entidades OSM. Son dataframes con nombre
+  # "osm_points", "osm_lines", "osm_polygons", "osm_multilines", "osm_multipolygons"
+  puntos <- osm_query_sf[startsWith(names(osm_query_sf), "osm_")] %>% 
+    # retiramos los que estan vacíos
+    compact() %>% 
+    # nos quedamos solo con el campo "name" 
+    map(~select(., name)) %>% 
+    # combinamos en un solo dataframe
+    reduce(rbind) %>% 
+    #tomamos los centroides
+    st_centroid() 
+  
   
   # Solo retenemos los puntos con nombre, ya que los que tienen ese campo vacío
   # parecen ser ubicaciones repetidas
-  filter(todo, !is.na(name))
+  filter(puntos, !is.na(name))
 }
   
 hospitales <- cbind(todo_a_puntos(hospitales), clase = "hospital")
@@ -233,7 +249,7 @@ Aquí es donde cada ciudad puede decidir su unidad geográfica de análisis. Lo 
 
 EL análisis a nivel de agregación similar al barrio (o distritos, comunas, etc) no es deseable debido a su baja resolución espacial. En ausencia de cartografía censal de alta granularidad, puede realizarse la partición de la superficie de la ciudad en celdas arbitrarias, lo suficientemente pequeñas.
 
-Para este ejemplo particionaremos la superficie de la ciudad en celdas de unos 500m de radio (aproximando una superfice de 0.785 km2)
+Para este ejemplo particionaremos la superficie de la ciudad en celdas de unos 500m de radio (aproximando una superficie de 0.785 km2)
 
 
 ```{r}
@@ -337,17 +353,100 @@ Para estimar distancias entre cada celda y su efector de salud más cercano, cre
 Como paso previo, descartamos celdas con población menor a un umbral dado:
 
 ```{r}
-umbral <- 1 # Solo celdas con al menos 1 persona
+umbral <- 10 # Solo celdas con al menos 10 personas
 
 celdas <- celdas %>% 
   filter(population >= umbral)
 
 ```
 
-Encontramos el elemento de la lista _Y_ (sitios de salud) más cercano a cada elemento de la lista _X_ (centroides de celdas).
+Estimaremos distancia a pie a través de la grilla de calles local usando Open Source Routing Machine ([OSRM](https://project-osrm.org)), un motor de ruteo de alta performance de uso libre, que permite además adquirir grillas de calles de forma muy simple usando datos de OpenStreetMap. 
 
-En esta instancia tomaremos distancia lineal. 
-En una futura iteración, estimaremos distancia a pie a través de la grilla de calles local usando [OSRM](https://project-osrm.org) 
+La instalación del software, adquisición de la grilla de calles y puesta en marcha del servicio de ruteo puede resumirse en 4 pasos:
+
+1. Instalar Docker  
+
+2. Descargar un extracto de los datos de OpenStreetMap para el país o región donde se estimarán los ruteos
+
+3. Preparar los datos de ruteo (preprocesamiento)
+
+4. Iniciar el servidor de ruteo
+
+
+<details><summary>Detalles para la instalación y puesta en marcha de OSRM</summary>
+
+Estas instrucciones fueron testeadas en un sistema corriendo Ubuntu Linux. Deberían funcionar sin modificaciones con cualquier otra versión de Linux.
+
+En MacOS, las instrucciones podrían funcionar sin cambios o con ajustes mínimos.
+
+En Windows, los pasos son los mismos pero los comandos podrían ser distintos. 
+
+__Instalar Docker__
+
+Descargar el software de https://www.docker.com/get-started y seguir las instrucciones
+
+__Descargar extracto de datos de OpenStreetMap__
+
+Crear una carpeta de trabajo
+
+Por ejemplo,
+
+`mkdir -p ~/data/osrm/`
+
+`cd ~/data/osrm/`
+
+Es importante no usar espacios en blanco en los nombres de los directorios, ya que causa problemas con docker. Es decir, evitar directorios tipo “~/data/ruteo con osrm/”
+
+Luego descargams allí la grilla de calles. Podemos usar la información geográfica contenida en la base de OpenStreetMap para obtener la grilla de calles de nuestra área de interés… o de todo el mundo.
+
+Por ejemplo, para el contenido completo de todo Ecuador podemos usar el servicio OpenStreetMap Data Extracts provisto por GeoFabrik.
+
+Descargamos el extracto más reciente para Ecuador con:
+
+`wget https://download.geofabrik.de/south-america/ecuador-latest.osm.pbf`
+
+__Preprocesar los datos de ruteo__
+
+OSRM requiere un procesamiento previo de los datos extraidos de OpenStreetMap, construyendo un modelo optimizado de la grilla de calles. Para la optimización se debe elegir un modo de transporte. Las opciones disponibles por default son: _car_ - _foot_ - _bicycle_
+
+Hacemos la extracción para el modo a pie (_foot_) con:
+
+`docker run -t -v $(pwd):/data osrm/osrm-backend osrm-extract -p /opt/foot.lua /data/ecuador-latest.osm.pbf`
+
+Esto inicia una instancia de Docker, corre el comando `osrm-extract` y luego desactiva la instacia.
+
+La opción -`v $(pwd):/data` crea un directorio `/data` dentro del contenedor de Docker, y muestra allí el contenido del directorio desde donde corrimos el comando; es decir, el directorio donde dejamos los datos de OSM. Así es como queda accesible para la instancia en Docker como `/data/ecuador-latest.osm.pbf`.
+
+Cuando corremos el comando por primera vez tomará unos cuantos minutos, ya que docker necesita descargar antes el container con OSRM. En lo sucesivo no será necesario, ya que tras la descaga guarda una copia local del container.
+
+Quedan dos operaciones pendientes que OSRM necesita antes de poder realizar ruteos.
+
+Dividir el grafo en celdas, ejecutando:
+
+`docker run -t -v $(pwd):/data osrm/osrm-backend osrm-partition /data/ecuador-latest.osrm`
+
+Obsérvese que ahora usamos ecuador-latest._osrm_ (ya no es “.pbf”), un archivo que quedó en el directorio de trabajo tras ejecutar el paso anterior.
+
+… y por último asignar “peso” a cada celda del grafo con
+
+`docker run -t -v $(pwd):/data osrm/osrm-backend osrm-customize /data/ecuador-latest.osrm`
+
+__Iniciar el servidor de ruteo__
+
+Con los datos ya preparados, sólo resta iniciar el servicio de ruteo:
+
+
+`docker run -t -i -p 5000:5000 -v $(pwd):/data osrm/osrm-backend osrm-routed --algorithm mld /data/ecuador-latest.osrm`
+
+
+Con ello nuestro sistema esta listo para ejecutar los siguientes pasos.
+
+A partir de ahora, pasamos a R. El resto del documento muestra código ejecutado en el entorno R.
+
+</details>
+</br>
+
+Disponiendo del servidor de ruteo, identificamos el elemento de la lista _Y_ (sitios de salud) más cercano a cada elemento de la lista _X_ (centroides de celdas), para luego poder calcular la ruta a pie.
 
 ```{r eval=FALSE}
 # Calculamos el centroide
@@ -355,36 +454,145 @@ centroides <- st_centroid(celdas)
 
 # Identificamos el índice (la posición en el dataframe) de hospital/clínica más cercano a cada uno
 id_cercanos <- unlist(st_nn(centroides, hospitales_y_clinicas))
+```
 
-# Calculamos la distancia entre cada par (por ahora lineal, a mejorar como distancia a pie por calles)
-distancia_a_salud <- st_distance(centroides, hospitales_y_clinicas[id_cercanos,], by_element = TRUE)
-# eliminamos la unidad (m)
-distancia_a_salud <- as.numeric(distancia_a_salud)
+Luego creamos una tabla de trayectos, con las coordenadas del centroide de cada celda (los orígenes) junto las coordenadas de su hospital más cercano (los destinos):
 
-# Agregamos as distancias
-celdas <- cbind(celdas, distancia_a_salud) 
+```{r eval=FALSE}
+# Creamos un dataframe de trayectos
+trayectos <- tibble(
+  origen_id = celdas$id,
+  origen_X = st_coordinates(st_centroid(celdas))[, 1],
+  origen_Y = st_coordinates(st_centroid(celdas))[, 2],
+  destino_id = hospitales_y_clinicas[id_cercanos, "name"]$name,
+  destino_X = st_coordinates(hospitales_y_clinicas[id_cercanos, ])[, 1],
+  destino_Y = st_coordinates(hospitales_y_clinicas[id_cercanos, ])[, 2]
+)
+```
+
+```{r echo=FALSE}
+#write_csv(trayectos, "~/Downloads/trayectos_quito.csv")
+trayectos <- read_csv("~/Downloads/trayectos_quito.csv")
 ```
 ```{r}
-#st_write(celdas, "~/Downloads/celdas_con_data_distancia.geojson")
+head(trayectos)
+```
+
+Probamos con el primer trayecto la obtención de la ruta a pie:
+
+```{r eval=FALSE}
+# Utilizamos nuestra instancia local de OSRM, en lugar de la opción por defecto que es el servidor público del proyecto OSRM
+
+options(osrm.server = "http://127.0.0.1:5000/")
+
+ruta <- osrmRoute(c(trayectos[1,"origen_id"], trayectos[1,"origen_X"], trayectos[1,"origen_Y"]),
+                  c(trayectos[1,"destino_id"], trayectos[1,"destino_X"], trayectos[1,"destino_Y"]),
+                  overview = "full", returnclass = "sf")
+
+```
+
+```{r echo=FALSE}
+#st_write(ruta, "~/Downloads/ruta_osrm_quito.geojson", delete_dsn = TRUE)
+ruta <- st_read("~/Downloads/ruta_osrm_quito.geojson")
+```
+
+El resultado:
+
+- duración del viaje en minutos
+```{r}
+ruta$duration
+```
+- distancia recorrido en km
+```{r}
+ruta$distance
+```
+
+- ruta
+
+```{r}
+leaflet(ruta) %>% 
+  addProviderTiles(provider = providers$OpenStreetMap) %>% 
+  addPolylines(color = "red") %>% 
+  addMarkers(data = trayectos[1,2:3], lng = ~origen_X, lat = ~origen_Y,
+             label = "origen", labelOptions = labelOptions(noHide = T, direction = "bottom")) %>% 
+  addMarkers(data = trayectos[1,4:6], lng = ~destino_X, lat = ~destino_Y, 
+             label = ~destino_id, labelOptions = labelOptions(noHide = T, direction = "bottom"))
+```
+
+
+Ahora estimamos tiempo y distancia del viaje a pie para todos los trayectos, y agregamos a cada celda el tiempo de viaje desde su centro hasta el efector de salud más cercano:
+
+
+```{r eval=FALSE}
+
+# Función que toma una fila con origen y destino, y devuelve sus identificadores 
+# junto a tiempo y distancia del viaje
+obtener_ruta <- possibly(function(origen_id, origen_X, origen_Y, 
+                                  destino_id, destino_X, destino_Y) {
+  
+                            ruta <- osrmRoute(src = c(origen_id, origen_X, origen_Y),
+                                              dst = c(destino_id, destino_X, destino_Y),
+                                              overview = FALSE)
+                            
+                            tibble(origen_id, destino_id, 
+                                   duracion = ruta["duration"], distancia = ruta["distance"]) }, 
+                        otherwise = NULL)
+
+
+# Aplicamos la función a todas las filas del dataframe de trayectos
+
+distancias <- pmap_df(trayectos, obtener_ruta) 
+
+
+
+pmap_df(trayectos[1:4,],
+                      possibly(function(origen_id, origen_X, origen_Y, 
+                                        destino_id, destino_X, destino_Y) {
+                        
+                        ruta <- osrmRoute(src = c(origen_id, origen_X, origen_Y),
+                                                            dst = c(destino_id, destino_X, destino_Y),
+                                                            overview = FALSE)
+                                        }
+                        cbind(id_grilla, 
+                              id_calle, 
+                              as_data_frame(),
+                              stringsAsFactors = FALSE), 
+                        NULL)) 
+
+# Agregamos a cada celda su tiempo de viaje y distancia hasta efector de salud más cercano
+
+
+celdas <- celdas %>% 
+  left_join(distancias, by = c("id" = "origen_id"))
+```
+
+```{r echo=FALSE}
+#st_write(celdas, "~/Downloads/celdas_con_data_distancia.geojson", delete_dsn = TRUE)
 celdas <- st_read("~/Downloads/celdas_con_data_distancia.geojson")
 ```
 
 
 ```{r}
+celdas <- celdas %>% 
+  mutate(rango = cut(duracion, breaks = c(0, 15, 30, 45, 60, 90, 120, max(duracion)), 
+                   labels = c("menos de 15 minutos", "15 a 30 minutos", "30 a 45 minutos", 
+                              "45 a 60 minutos", "60 a 90 minutos", "90 a 120 minutos",
+                              "más dos horas")))
+
 ggplot(celdas) +
-  geom_sf(aes(fill = distancia_a_salud), color = NA) +
-  scale_fill_viridis_c(option = "plasma") +
+  geom_sf(aes(fill = rango), color = NA) +
+  scale_fill_viridis_d(option = "magma", direction = -1) +
   theme_minimal() + 
-  labs(title = "Distancia a efector de salud más cercano", fill = "m")
+  labs(title = "Tiempo de viaje a pie hasta el efector de salud más cercano", fill = NULL)
 ```
 
-### Identificacion de zonas de riesgo
+### Identificación de zonas de riesgo
 
 Combinando los datos demográficos con los de cercanía a salud, resaltamos las zonas donde se concentra población mayor, y a la vez se verifican las mayores distancias.
 
 ```{r}
 ggplot(celdas) +
-  geom_point(aes(x = population, y = distancia_a_salud)) +
+  geom_point(aes(x = population, y = duracion)) +
   labs(x = "personas mayores a 60 años") +
   theme_minimal()
 ```
@@ -393,15 +601,15 @@ En base al gráfico de dispersión, consideraremos casos crítico a las celdas c
 
 ```{r}
 celdas <- celdas %>% 
-  mutate(sitio_critico = population > 500 & distancia_a_salud > 1500)
+  mutate(sitio_critico = population > 500 & duracion > 30)
 ```
 
 
 ```{r}
 ggplot(celdas) +
-  geom_point(aes(x = population, y = distancia_a_salud)) +
+  geom_point(aes(x = population, y = duracion)) +
   geom_point(data = filter(celdas, sitio_critico), 
-             aes(x = population, y = distancia_a_salud), color = "red") +
+             aes(x = population, y = duracion), color = "red") +
   labs(x = "personas mayores a 60 años") +
   theme_minimal()
 ```
@@ -415,7 +623,11 @@ celdas %>%
   filter(sitio_critico) %>% 
   leaflet() %>% 
   addProviderTiles(providers$OpenStreetMap) %>% 
-  addPolygons(color = "red", popup = ~paste("población > 60 años:", round(population),"</br>",
-                                            "distancia a salud:", round(distancia_a_salud), "m"))
+  addPolygons(color = "purple", popup = ~paste("población > 60 años:", round(population),"</br>",
+                                            "tiempo de viaje:", duracion, "minutos"))
+```
+
+```{r echo=FALSE}
+#st_write(celdas, "data/celdas_quito.geojson", delete_dsn = TRUE)
 ```
 

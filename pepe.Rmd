@@ -1,0 +1,24 @@
+---
+title: "Untitled"
+author: "Antonio Vázquez Brust"
+date: "4/4/2020"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+
+atencion_ciudadano <- read.csv("http://bitsandbricks.github.io/data/gcba_suaci_comunas.csv")
+
+```
+
+
+```{r dpi=500}
+
+ggplot(atencion_ciudadano) + 
+    geom_bar(aes(x = factor(as.character(BARRIO)))) +
+    coord_flip()
+
+```
+
