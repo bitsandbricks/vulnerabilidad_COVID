@@ -1,0 +1,2001 @@
+<!DOCTYPE html> 
+<html lang="es-la"> 
+  <head>
+    <title>R+SP Display/Input Page</title>
+
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <style type="text/css">
+    <!--
+      BODY { font-size: 8pt; font-family: Arial, Helvetica, sans-serif, Verdana; }
+      H2   { font-size: 12pt; font-family: Arial, Helvetica, sans-serif, Verdana; }
+      H3   { font-size: 10pt; font-family: Arial, Helvetica, sans-serif, Verdana; }
+      TD   { font-size: 9pt; font-family: Arial, Helvetica, sans-serif, Verdana; }
+    -->
+    
+    #toolbar {
+			padding: 10px 4px;
+			width: 400px;
+			align: center;
+			
+		}
+			.ui-state-disabled { 
+    		display: none; /* disabled tabs don't show up */ 
+			} 
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="/redatam/css/themes/aristo/skin.css"/>
+    <link rel="stylesheet" type="text/css" href="/redatam/css/panels.css"/>
+
+    <script type="text/javascript" src="/redatam/js/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="/redatam/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="/redatam/js/jquery.form.js"></script>
+
+    <script type="text/javascript" src="/redatam/js/outputForm.js">
+    </script>
+
+<style type="text/css">
+table.RedOutput {
+  border-width: 1px;
+  border-spacing: 1px;
+  border-style: none;
+  border-color: #C0C0C0;
+  border-collapse: separate;
+  background-color: #FFFFFF;
+  font-family: Arial;
+  font-size: 8pt;
+  }
+table.RedOutput th {
+  border-width: 1px;
+  border-style: none;
+  border-color: #C0C0C0;
+  padding: 1px;
+  background-color: #FFFFFF;
+  font-family: Arial;
+  font-size: 8pt;
+  }
+table.RedOutput td {
+  border-width: 1px;
+  border-style: none;
+  border-color: #C0C0C0;
+  padding: 1px;
+  }
+</style>
+
+
+
+  </head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0"  >
+
+<div id="title_dummy" align='center'>
+    <H2>Diccionario de la Base</H2>
+    
+</div>
+
+<div style="margin: 10 16px 0 10px;">
+
+	<div class="ui-panel ui-widget-content ui-corner-all">
+		<div class="ui-panel-titlebar ui-widget-header ui-corner-all">
+				<span class="ui-panel-title" id="main_title">??</span>
+		</div>
+		<br/>
+
+		<div id="div-error">
+		</div>
+
+		<span id="toolbar" class="ui-widget-header ui-corner-all">
+			<button id="btnRegresar">Regresar</button>
+		</span>
+
+		<div id="tabs">
+			<ul>
+				<li><a href="#tabs-1">Tabla</a></li>
+				<li><a href="#tabs-2">Gráfico</a></li>
+				<li><a href="#tabs-3">Programa Redatam+SP</a></li>
+				<li><a href="#tabs-4">Mapa</a></li>
+				<li><a href="#tabs-5">Dictionary</a></li>
+			</ul>
+
+			<div id="tabs-1">
+				<div id="tab-output"></div>
+<!--				<br/>
+				<span id="toolbar" class="ui-widget-header ui-corner-all">
+					Export:
+					<button id="excel">Excel</button>
+					<button id="pdf">PDF</button>
+				</span>
+-->			</div>
+
+			<div id="tabs-2">
+				<div id="tab-graphic" align="center">
+				</div>
+			</div>
+
+			<div id="tabs-3">
+				<div id="tab-spc" align="left">
+					<div></div>
+
+				</div>
+			</div>
+
+			<div id="tabs-4">
+				<div id="tab-map" align="center">
+				</div>
+			</div>
+			
+			<div id="tabs-5">
+				<div id="tab-dic" align="left">
+						<div></div>
+				</div>
+			</div>
+			
+		</div>
+		
+
+
+		<div id="divInput" class="ui-widget-content1">
+	      <div align='left'>
+	        
+<table border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td width="5%">&nbsp;</td>
+    <td align="left">
+	  <table class="RedOutput">
+        <tr bgcolor= "#FFFFFF">
+          <th><font color= "#000000">#</font></th>
+          <th><font color= "#000000">Nombre de la entidad</font></th>
+          <th><font color= "#000000">Nombre de la variable</font></th>
+          <th><font color= "#000000">Rótulo</font></th>
+          <th><font color= "#000000">Tipo</font></th>
+          <th><font color= "#000000">Rango</font></th>
+          <th><font color= "#000000">Alias</font></th>
+          <th><font color= "#000000">Grupo</font></th>
+        </tr>
+        <tr>
+          <td colspan='8'>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>CE11</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>PROVIN</td>
+          <td>&nbsp;</td>
+          <td>Provincia de empadronamiento</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>2.1</td>
+          <td>&nbsp;</td>
+          <td>I01</td>
+          <td>Identificador de provincia</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>2.2</td>
+          <td>&nbsp;</td>
+          <td>PROVIN</td>
+          <td>Codigo de provincia</td>
+          <td>I</td>
+          <td>1-90</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>2.3</td>
+          <td>&nbsp;</td>
+          <td>NOMPROV</td>
+          <td>Nombre de provincia</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>2.4</td>
+          <td>&nbsp;</td>
+          <td>AREAPROV</td>
+          <td>Superficie de la provincia (km2)</td>
+          <td>R</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>CANTON</td>
+          <td>&nbsp;</td>
+          <td>Canton de empadronamiento</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>3.1</td>
+          <td>&nbsp;</td>
+          <td>I02</td>
+          <td>Identificador de canton</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>3.2</td>
+          <td>&nbsp;</td>
+          <td>CANTON</td>
+          <td>Codigo de canton</td>
+          <td>I</td>
+          <td>101-9004</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>3.3</td>
+          <td>&nbsp;</td>
+          <td>NOMCANT</td>
+          <td>Nombre de canton</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>3.4</td>
+          <td>&nbsp;</td>
+          <td>AREACANT</td>
+          <td>Superficie del canton (km2)</td>
+          <td>R</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>PARROQ</td>
+          <td>&nbsp;</td>
+          <td>Parroquia de empadronamiento</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>4.1</td>
+          <td>&nbsp;</td>
+          <td>I03</td>
+          <td>Identificador de Parroquia</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>4.2</td>
+          <td>&nbsp;</td>
+          <td>PARROQ</td>
+          <td>Codigo de parroquia</td>
+          <td>I</td>
+          <td>10150-900451</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>4.3</td>
+          <td>&nbsp;</td>
+          <td>NOMPARR</td>
+          <td>Nombre de parroqquia</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>4.4</td>
+          <td>&nbsp;</td>
+          <td>AREAPARR</td>
+          <td>Superficie de la parroquia (km2)</td>
+          <td>R</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>ZONA</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>5.1</td>
+          <td>&nbsp;</td>
+          <td>I04</td>
+          <td>Identificador de zona</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>5.2</td>
+          <td>&nbsp;</td>
+          <td>ZONA</td>
+          <td>Codigo de zona</td>
+          <td>I</td>
+          <td>1-999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>SECTOR</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>6.1</td>
+          <td>&nbsp;</td>
+          <td>I05</td>
+          <td>Identificador de sector</td>
+          <td>C</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>6.2</td>
+          <td>&nbsp;</td>
+          <td>SECTOR</td>
+          <td>Codigo de sector</td>
+          <td>I</td>
+          <td>1-999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>VIVIENDA</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.1</td>
+          <td>&nbsp;</td>
+          <td>UR</td>
+          <td>Area Urbana o Rural</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>URBURUR</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.2</td>
+          <td>&nbsp;</td>
+          <td>VTV</td>
+          <td>Tipo de vivienda</td>
+          <td>I</td>
+          <td>1-17</td>
+          <td>TIPVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.3</td>
+          <td>&nbsp;</td>
+          <td>VAP</td>
+          <td>Acceso principal a la vivienda</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.4</td>
+          <td>&nbsp;</td>
+          <td>VCO</td>
+          <td>Condicion de ocupacion</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>CONOCU</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.5</td>
+          <td>&nbsp;</td>
+          <td>V01</td>
+          <td>Material del techo o cubierta</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>TECHO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.6</td>
+          <td>&nbsp;</td>
+          <td>V02</td>
+          <td>Estado del techo</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.7</td>
+          <td>&nbsp;</td>
+          <td>V03</td>
+          <td>Material de paredes exteriores</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>PARED</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.8</td>
+          <td>&nbsp;</td>
+          <td>V04</td>
+          <td>Estado de las paredes</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.9</td>
+          <td>&nbsp;</td>
+          <td>V05</td>
+          <td>Material del piso</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>PISO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.10</td>
+          <td>&nbsp;</td>
+          <td>V06</td>
+          <td>Estado del piso</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.11</td>
+          <td>&nbsp;</td>
+          <td>V07</td>
+          <td>Procedencia del agua recibida</td>
+          <td>I</td>
+          <td>1-5</td>
+          <td>MEDABA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.12</td>
+          <td>&nbsp;</td>
+          <td>V08</td>
+          <td>Conexion del agua</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>SISABA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.13</td>
+          <td>&nbsp;</td>
+          <td>V09</td>
+          <td>Tipo de servicio higiénico</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>ELIAGU</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.14</td>
+          <td>&nbsp;</td>
+          <td>V10</td>
+          <td>Procedencia de luz eléctrica</td>
+          <td>I</td>
+          <td>1-5</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.15</td>
+          <td>&nbsp;</td>
+          <td>V11</td>
+          <td>Tenencia de medidor de energia</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.16</td>
+          <td>&nbsp;</td>
+          <td>V12A</td>
+          <td>Numero de focos ahorradores</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.17</td>
+          <td>&nbsp;</td>
+          <td>V12B</td>
+          <td>Numero de focos convencionales</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.18</td>
+          <td>&nbsp;</td>
+          <td>V13</td>
+          <td>Eliminacion de la basura</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>ELIBAS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.19</td>
+          <td>&nbsp;</td>
+          <td>V14</td>
+          <td>Numero de cuartos</td>
+          <td>I</td>
+          <td>1-20</td>
+          <td>NUMCUA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.20</td>
+          <td>&nbsp;</td>
+          <td>V15</td>
+          <td>Existencia de hogares en la vivienda</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>HOGVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.21</td>
+          <td>&nbsp;</td>
+          <td>V16</td>
+          <td>Numero de hogares</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>TOTHOG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.22</td>
+          <td>&nbsp;</td>
+          <td>TOTPER</td>
+          <td>Total de personas en la vivienda</td>
+          <td>I</td>
+          <td>1-4250</td>
+          <td>SUMAPO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.23</td>
+          <td>&nbsp;</td>
+          <td>TOTDOR</td>
+          <td>Total de dormitorios en la vivienda</td>
+          <td>I</td>
+          <td>0-20</td>
+          <td>SUMDOR</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.24</td>
+          <td>&nbsp;</td>
+          <td>PERCUA</td>
+          <td>Numero de personas por cuarto</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.25</td>
+          <td>&nbsp;</td>
+          <td>PERDOR</td>
+          <td>Numero de personas por dormitorio</td>
+          <td>I</td>
+          <td>1-5</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.26</td>
+          <td>&nbsp;</td>
+          <td>VIVREM</td>
+          <td>Viviendas con remesas</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.27</td>
+          <td>&nbsp;</td>
+          <td>TOTEMI</td>
+          <td>Total de emigrantes</td>
+          <td>I</td>
+          <td>0-14</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.28</td>
+          <td>&nbsp;</td>
+          <td>TOTAM</td>
+          <td>Vivienda de adulto mayor</td>
+          <td>I</td>
+          <td>0-500</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>7.29</td>
+          <td>&nbsp;</td>
+          <td>TVAG</td>
+          <td>Tipo de vivienda agrupado</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>HOGAR</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.1</td>
+          <td>&nbsp;</td>
+          <td>NUMHOG</td>
+          <td>Numero del hogar en la vivienda</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>ORDHOG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.2</td>
+          <td>&nbsp;</td>
+          <td>H01</td>
+          <td>Dormitorios exclusivos</td>
+          <td>I</td>
+          <td>0-20</td>
+          <td>SUMDOR</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.3</td>
+          <td>&nbsp;</td>
+          <td>H01N</td>
+          <td>Ningun dormitorio</td>
+          <td>I</td>
+          <td>0-0</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.4</td>
+          <td>&nbsp;</td>
+          <td>H02</td>
+          <td>Cocina exclusiva</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>COCINA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.5</td>
+          <td>&nbsp;</td>
+          <td>H03</td>
+          <td>Tipo de excusado del hogar</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>SERHIG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.6</td>
+          <td>&nbsp;</td>
+          <td>H04</td>
+          <td>Instalaciones para bañarse</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>DUCHA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.7</td>
+          <td>&nbsp;</td>
+          <td>H05</td>
+          <td>Energia para cocinar</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>COMBUS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.8</td>
+          <td>&nbsp;</td>
+          <td>H06</td>
+          <td>Procedencia agua para tomar</td>
+          <td>I</td>
+          <td>1-5</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.9</td>
+          <td>&nbsp;</td>
+          <td>H07</td>
+          <td>Disponibilidad de telefono convencional</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.10</td>
+          <td>&nbsp;</td>
+          <td>H08</td>
+          <td>Disponibilidad de telefono celular</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.11</td>
+          <td>&nbsp;</td>
+          <td>H09</td>
+          <td>Disponibilidad de internet</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.12</td>
+          <td>&nbsp;</td>
+          <td>H10</td>
+          <td>Dispone de computadora</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.13</td>
+          <td>&nbsp;</td>
+          <td>H11</td>
+          <td>Dispone de televisión por cable</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.14</td>
+          <td>&nbsp;</td>
+          <td>H12</td>
+          <td>Valor último pago de luz eléctrica</td>
+          <td>I</td>
+          <td>0-9999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.15</td>
+          <td>&nbsp;</td>
+          <td>H12NP</td>
+          <td>Paga en el arriendo o no paga</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.16</td>
+          <td>&nbsp;</td>
+          <td>H13A</td>
+          <td>Alguien trabaja fuera de la ciudad</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.17</td>
+          <td>&nbsp;</td>
+          <td>H13B</td>
+          <td>Número de personas que trabajan fuera de la ciudad</td>
+          <td>I</td>
+          <td>1-25</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.18</td>
+          <td>&nbsp;</td>
+          <td>H14A</td>
+          <td>Alguien estudia fuera de la ciudad</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.19</td>
+          <td>&nbsp;</td>
+          <td>H14B</td>
+          <td>Número de personas que estudian fuera de la ciudad</td>
+          <td>I</td>
+          <td>1-10</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.20</td>
+          <td>&nbsp;</td>
+          <td>H15</td>
+          <td>Tenencia o propiedad de la vivienda</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>TENVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.21</td>
+          <td>&nbsp;</td>
+          <td>M1</td>
+          <td>Recibió dinero del exterior</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.22</td>
+          <td>&nbsp;</td>
+          <td>M2A</td>
+          <td>Viajaron al extranjero y aun no vuelven</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>MIGHOG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.23</td>
+          <td>&nbsp;</td>
+          <td>M2B</td>
+          <td>Personas que viajaron al exterior</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>TOTMIG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.24</td>
+          <td>&nbsp;</td>
+          <td>TOTPER</td>
+          <td>Total de personas del Hogar</td>
+          <td>I</td>
+          <td>1-4250</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.25</td>
+          <td>&nbsp;</td>
+          <td>TOTHOM</td>
+          <td>Total de hombres del hogar</td>
+          <td>I</td>
+          <td>0-4250</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>8.26</td>
+          <td>&nbsp;</td>
+          <td>TOTMUJ</td>
+          <td>Total de mujeres del hogar</td>
+          <td>I</td>
+          <td>0-4250</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>PERSONA</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.1</td>
+          <td>&nbsp;</td>
+          <td>P00</td>
+          <td>Número de orden de la persona en el hogar</td>
+          <td>I</td>
+          <td>1-4250</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.2</td>
+          <td>&nbsp;</td>
+          <td>PCD</td>
+          <td>Come y duerme  en este hogar</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.3</td>
+          <td>&nbsp;</td>
+          <td>P01</td>
+          <td>Sexo</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>SEXO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.4</td>
+          <td>&nbsp;</td>
+          <td>P02</td>
+          <td>Relacion de parentesco con el jefe(a) del hogar</td>
+          <td>I</td>
+          <td>1-12</td>
+          <td>PARENT</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.5</td>
+          <td>&nbsp;</td>
+          <td>P03</td>
+          <td>Edad</td>
+          <td>I</td>
+          <td>0-120</td>
+          <td>EDAD</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.6</td>
+          <td>&nbsp;</td>
+          <td>P04M</td>
+          <td>Mes de nacimiento</td>
+          <td>I</td>
+          <td>1-12</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.7</td>
+          <td>&nbsp;</td>
+          <td>P04A</td>
+          <td>Año de nacimiento</td>
+          <td>I</td>
+          <td>1890-2010</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.8</td>
+          <td>&nbsp;</td>
+          <td>P05</td>
+          <td>Tiene cédula de ciudadanía ecuatoriana</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.9</td>
+          <td>&nbsp;</td>
+          <td>P06</td>
+          <td>Está inscrito en el Registro Civil</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.10</td>
+          <td>&nbsp;</td>
+          <td>P07</td>
+          <td>Seguro de salud privado</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.11</td>
+          <td>&nbsp;</td>
+          <td>P08</td>
+          <td>Discapacidad permanente por más de un año</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.12</td>
+          <td>&nbsp;</td>
+          <td>P091</td>
+          <td>Discapacidad intelectual</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.13</td>
+          <td>&nbsp;</td>
+          <td>P092</td>
+          <td>Discapacidad Físico-Motora</td>
+          <td>I</td>
+          <td>2-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.14</td>
+          <td>&nbsp;</td>
+          <td>P093</td>
+          <td>Discapacidad Visual</td>
+          <td>I</td>
+          <td>3-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.15</td>
+          <td>&nbsp;</td>
+          <td>P094</td>
+          <td>Discapacidad Auditiva</td>
+          <td>I</td>
+          <td>4-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.16</td>
+          <td>&nbsp;</td>
+          <td>P095</td>
+          <td>Discapacidad Mental</td>
+          <td>I</td>
+          <td>5-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.17</td>
+          <td>&nbsp;</td>
+          <td>P10</td>
+          <td>Asiste a establecimiento de educación especial</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.18</td>
+          <td>&nbsp;</td>
+          <td>P11L</td>
+          <td>En dónde nació?</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.19</td>
+          <td>&nbsp;</td>
+          <td>P11P</td>
+          <td>Provincia de nacimiento</td>
+          <td>I</td>
+          <td>1-90</td>
+          <td>PRONAC</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.20</td>
+          <td>&nbsp;</td>
+          <td>P11C</td>
+          <td>Cantón de nacimiento</td>
+          <td>I</td>
+          <td>101-9004</td>
+          <td>CANNAC</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.21</td>
+          <td>&nbsp;</td>
+          <td>P11PQ</td>
+          <td>Parroquia de nacimiento</td>
+          <td>I</td>
+          <td>10150-900451</td>
+          <td>PARNAC</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.22</td>
+          <td>&nbsp;</td>
+          <td>P11A</td>
+          <td>Año de llegada al Ecuador</td>
+          <td>I</td>
+          <td>1905-9999</td>
+          <td>ANLLEGO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.23</td>
+          <td>&nbsp;</td>
+          <td>P12L</td>
+          <td>En donde vive habitualmente?</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.24</td>
+          <td>&nbsp;</td>
+          <td>P12P</td>
+          <td>Provincia de residencia habitual</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>PROVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.25</td>
+          <td>&nbsp;</td>
+          <td>P12C</td>
+          <td>Cantón de residencia habitual</td>
+          <td>I</td>
+          <td>101-9004</td>
+          <td>CANVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.26</td>
+          <td>&nbsp;</td>
+          <td>P12PQ</td>
+          <td>Parroquia de residencia habitual</td>
+          <td>I</td>
+          <td>10150-900451</td>
+          <td>PARVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.27</td>
+          <td>&nbsp;</td>
+          <td>P13L</td>
+          <td>En donde vivía hace 5 años?</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.28</td>
+          <td>&nbsp;</td>
+          <td>P13P</td>
+          <td>Provincia donde vivía hace 5 años</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>PROCIN</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.29</td>
+          <td>&nbsp;</td>
+          <td>P13C</td>
+          <td>Cantón donde vivía hace 5 años</td>
+          <td>I</td>
+          <td>101-9999</td>
+          <td>CANCIN</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.30</td>
+          <td>&nbsp;</td>
+          <td>P13PQ</td>
+          <td>Parroquia donde vivía hace 5 años</td>
+          <td>I</td>
+          <td>10150-999999</td>
+          <td>PARCIN</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.31</td>
+          <td>&nbsp;</td>
+          <td>P141P</td>
+          <td>El padre habla lengua indígena</td>
+          <td>I</td>
+          <td>1-1</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.32</td>
+          <td>&nbsp;</td>
+          <td>P141M</td>
+          <td>La madre habla lengua indígena</td>
+          <td>I</td>
+          <td>1-1</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.33</td>
+          <td>&nbsp;</td>
+          <td>P142P</td>
+          <td>El padre habla idioma castellano/español</td>
+          <td>I</td>
+          <td>2-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.34</td>
+          <td>&nbsp;</td>
+          <td>P142M</td>
+          <td>La madre habla idioma castellano/español</td>
+          <td>I</td>
+          <td>2-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.35</td>
+          <td>&nbsp;</td>
+          <td>P143P</td>
+          <td>El padre habla lengua extranjera</td>
+          <td>I</td>
+          <td>3-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.36</td>
+          <td>&nbsp;</td>
+          <td>P143M</td>
+          <td>La madre habla lengua extranjera</td>
+          <td>I</td>
+          <td>3-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.37</td>
+          <td>&nbsp;</td>
+          <td>P144P</td>
+          <td>El padre no habla ningún idioma o lengua</td>
+          <td>I</td>
+          <td>4-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.38</td>
+          <td>&nbsp;</td>
+          <td>P144M</td>
+          <td>La madre no habla ningún idioma o lengua</td>
+          <td>I</td>
+          <td>4-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.39</td>
+          <td>&nbsp;</td>
+          <td>P151</td>
+          <td>Habla lengua indígena</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.40</td>
+          <td>&nbsp;</td>
+          <td>P151C</td>
+          <td>Lengua indígena que habla</td>
+          <td>I</td>
+          <td>1-88</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.41</td>
+          <td>&nbsp;</td>
+          <td>P152</td>
+          <td>Habla idioma catellano/español</td>
+          <td>I</td>
+          <td>2-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.42</td>
+          <td>&nbsp;</td>
+          <td>P153</td>
+          <td>Habla idioma extranjero</td>
+          <td>I</td>
+          <td>3-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.43</td>
+          <td>&nbsp;</td>
+          <td>P154</td>
+          <td>No habla</td>
+          <td>I</td>
+          <td>4-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.44</td>
+          <td>&nbsp;</td>
+          <td>P16</td>
+          <td>Autoidentificación según cultura y costumbres</td>
+          <td>I</td>
+          <td>1-8</td>
+          <td>ETNIA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.45</td>
+          <td>&nbsp;</td>
+          <td>P17</td>
+          <td>Nacionalidad o pueblo indígena al que pertenece</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>NACIONA</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.46</td>
+          <td>&nbsp;</td>
+          <td>P181</td>
+          <td>Niño(a) en Programa del INFA</td>
+          <td>I</td>
+          <td>1-1</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.47</td>
+          <td>&nbsp;</td>
+          <td>P182</td>
+          <td>Niño(a) en Programa del Ministerio de Educación</td>
+          <td>I</td>
+          <td>2-2</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.48</td>
+          <td>&nbsp;</td>
+          <td>P183</td>
+          <td>Niño(a) Programa de Centro Infantil Privado</td>
+          <td>I</td>
+          <td>3-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.49</td>
+          <td>&nbsp;</td>
+          <td>P184</td>
+          <td>Niño(a) en Programa de Centro Infantil Público</td>
+          <td>I</td>
+          <td>4-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.50</td>
+          <td>&nbsp;</td>
+          <td>P185</td>
+          <td>Niño(a) en otro programas</td>
+          <td>I</td>
+          <td>5-5</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.51</td>
+          <td>&nbsp;</td>
+          <td>P186</td>
+          <td>Al niño(a) le cuida la madre, el padre, familiares o conocidos gratis</td>
+          <td>I</td>
+          <td>6-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.52</td>
+          <td>&nbsp;</td>
+          <td>P187</td>
+          <td>Cuidan del niño(a) familiares o conocidos pagandoles</td>
+          <td>I</td>
+          <td>7-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.53</td>
+          <td>&nbsp;</td>
+          <td>P19</td>
+          <td>Sabe leer y escribir</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>ALFAB</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.54</td>
+          <td>&nbsp;</td>
+          <td>P20T</td>
+          <td>Utilizó teléfono celular en los últimos 6 meses</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.55</td>
+          <td>&nbsp;</td>
+          <td>P20I</td>
+          <td>Utilizo internet en los últimos 6 meses</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.56</td>
+          <td>&nbsp;</td>
+          <td>P20C</td>
+          <td>Utilizo computadora en los últimos 6 meses</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.57</td>
+          <td>&nbsp;</td>
+          <td>P21</td>
+          <td>Asiste a un establecimiento de enseñanza regular</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>ASISTE</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.58</td>
+          <td>&nbsp;</td>
+          <td>P22</td>
+          <td>Establecimiento de enseñanza regular al que asiste</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.59</td>
+          <td>&nbsp;</td>
+          <td>P23</td>
+          <td>Nivel de instrucción al que asiste o asistio</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>NIVINS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.60</td>
+          <td>&nbsp;</td>
+          <td>P24</td>
+          <td>Grado, curso o año más alto que asiste o asistio</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>GRADO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.61</td>
+          <td>&nbsp;</td>
+          <td>P25</td>
+          <td>Tiene título de postbachillerato, superior o postgrado</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>TIENTIT</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.62</td>
+          <td>&nbsp;</td>
+          <td>P26</td>
+          <td>Nombre del título</td>
+          <td>I</td>
+          <td>1-999</td>
+          <td>TITUNI</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.63</td>
+          <td>&nbsp;</td>
+          <td>P27</td>
+          <td>Qué hizo la semana pasada</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>HISEMP</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.64</td>
+          <td>&nbsp;</td>
+          <td>P28</td>
+          <td>Si no ha trabajado</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>ALOMEJOR</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.65</td>
+          <td>&nbsp;</td>
+          <td>P29</td>
+          <td>Rama de actividad económica</td>
+          <td>I</td>
+          <td>111-9999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.66</td>
+          <td>&nbsp;</td>
+          <td>P30</td>
+          <td>Grupos de Ocupación</td>
+          <td>I</td>
+          <td>110-9999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.67</td>
+          <td>&nbsp;</td>
+          <td>P31</td>
+          <td>Categoria de Ocupación</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>CATOCUP</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.68</td>
+          <td>&nbsp;</td>
+          <td>P32</td>
+          <td>Número de horas de trabajo</td>
+          <td>I</td>
+          <td>1-999</td>
+          <td>HORAS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.69</td>
+          <td>&nbsp;</td>
+          <td>P33</td>
+          <td>Trabajo dentro o fuera del hogar</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.70</td>
+          <td>&nbsp;</td>
+          <td>P34</td>
+          <td>Estado conyugal</td>
+          <td>I</td>
+          <td>1-6</td>
+          <td>ESTCIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.71</td>
+          <td>&nbsp;</td>
+          <td>P35</td>
+          <td>Aporte o afiliación a la Seguridad Social</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>AFILIADO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.72</td>
+          <td>&nbsp;</td>
+          <td>P36</td>
+          <td>Número de hijos nacidos vivos</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>HIJVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.73</td>
+          <td>&nbsp;</td>
+          <td>P36H</td>
+          <td>Número de hijos nacidos vivos hombres</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.74</td>
+          <td>&nbsp;</td>
+          <td>P36M</td>
+          <td>Número de hijas nacidas vivas</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.75</td>
+          <td>&nbsp;</td>
+          <td>P37</td>
+          <td>Total de Hijos Vivos Actualmente</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>HVIACT</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.76</td>
+          <td>&nbsp;</td>
+          <td>P38</td>
+          <td>A que edad tuvo su primer hijo o hija</td>
+          <td>I</td>
+          <td>12-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.77</td>
+          <td>&nbsp;</td>
+          <td>P39A</td>
+          <td>Año que tuvo su último hijo nacido vivo</td>
+          <td>I</td>
+          <td>1920-9999</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.78</td>
+          <td>&nbsp;</td>
+          <td>P39M</td>
+          <td>Mes que tuvo su último hijo nacido vivo</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>MESNAC</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.79</td>
+          <td>&nbsp;</td>
+          <td>P40</td>
+          <td>Esta vivo el último hijo o hija nacido vivo</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>ULTVIV</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.80</td>
+          <td>&nbsp;</td>
+          <td>TIPOACT</td>
+          <td>Tipo de actividad</td>
+          <td>I</td>
+          <td>1-13</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.81</td>
+          <td>&nbsp;</td>
+          <td>RAMACT</td>
+          <td>Rama de actividad (Primer nivel)</td>
+          <td>I</td>
+          <td>1-23</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.82</td>
+          <td>&nbsp;</td>
+          <td>GRUOCU</td>
+          <td>Grupo de ocupacion (Primer Nivel)</td>
+          <td>I</td>
+          <td>1-12</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.83</td>
+          <td>&nbsp;</td>
+          <td>CATOCU</td>
+          <td>Categoria de ocupacion</td>
+          <td>I</td>
+          <td>1-10</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.84</td>
+          <td>&nbsp;</td>
+          <td>GRAESC</td>
+          <td>Grados de escolaridad</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.85</td>
+          <td>&nbsp;</td>
+          <td>DISCAP</td>
+          <td>Tipo de discapacidad</td>
+          <td>I</td>
+          <td>1-9</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.86</td>
+          <td>&nbsp;</td>
+          <td>IDIOMA</td>
+          <td>Idioma que habla</td>
+          <td>I</td>
+          <td>1-8</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.87</td>
+          <td>&nbsp;</td>
+          <td>PLANIN</td>
+          <td>Programas de cuidado de los niños menores de 5 años</td>
+          <td>I</td>
+          <td>1-12</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.88</td>
+          <td>&nbsp;</td>
+          <td>NIVINST</td>
+          <td>Nivel de instrucción (Sistema tradicional)</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.89</td>
+          <td>&nbsp;</td>
+          <td>NIVINSR</td>
+          <td>Nivel de instrucción (Reforma curricular)</td>
+          <td>I</td>
+          <td>1-99</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.90</td>
+          <td>&nbsp;</td>
+          <td>GEDAD</td>
+          <td>Grupos de edad</td>
+          <td>I</td>
+          <td>1-22</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>9.91</td>
+          <td>&nbsp;</td>
+          <td>GRANEDAD</td>
+          <td>Grandes grupos de edad</td>
+          <td>I</td>
+          <td>1-3</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>MIGRANTE</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.1</td>
+          <td>&nbsp;</td>
+          <td>M00</td>
+          <td>Orden del Migrante</td>
+          <td>I</td>
+          <td>1-7</td>
+          <td>ORDMIG</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.2</td>
+          <td>&nbsp;</td>
+          <td>M31</td>
+          <td>Sexo de la persona que salio del país</td>
+          <td>I</td>
+          <td>1-2</td>
+          <td>SEXO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.3</td>
+          <td>&nbsp;</td>
+          <td>M32</td>
+          <td>Edad al salir del país</td>
+          <td>I</td>
+          <td>0-99</td>
+          <td>EDAD</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.4</td>
+          <td>&nbsp;</td>
+          <td>M33</td>
+          <td>Año de salida del país</td>
+          <td>I</td>
+          <td>2001-9999</td>
+          <td>ANSAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.5</td>
+          <td>&nbsp;</td>
+          <td>M34</td>
+          <td>Actual país de residencia</td>
+          <td>I</td>
+          <td>100-999</td>
+          <td>PAISDEST</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.6</td>
+          <td>&nbsp;</td>
+          <td>M35</td>
+          <td>Principal motivo de viaje</td>
+          <td>I</td>
+          <td>1-4</td>
+          <td>MOTIVO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>10.7</td>
+          <td>&nbsp;</td>
+          <td>GEDAD</td>
+          <td>Grupos de edad de los migrantes</td>
+          <td>I</td>
+          <td>1-21</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan='8'>&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan='8'><b>Procesado con Redatam+SP;CENSO DE POBLACION Y VIVIENDA 2010;INSTITUTO NACIONAL DE ESTADÍSTICA Y CENSOS - INEC, ECUADOR</b></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+
+	      </div>
+
+		</div>
+
+		<!-- Output -->
+		<div id="output" align="center">
+			<br/>
+			<div>
+				<!-- output -->
+			</div>
+		</div>
+
+		<div id="divImage" align="center">
+			<img src=""/>
+		</div>
+	</div>
+</div>
+
+<div id="statusDialog" title="R+WebServer">
+	<br/>
+	<table border="0">
+		<tr>
+			<td>
+				<img src="/redatam/images/ajax-loader.gif"/>
+			</td>
+			<td valign="center">
+				Procesando, espere por favor...
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br/>
+<div class="ui-panel ui-widget-content ui-corner-all">
+	<center>WebMaster <a href="mailto:redatam@cepal.org">redatam@cepal.org</a><br>Copyright © 2002-2011 Centro Latinoamericano y Caribeño de Demografía (CELADE), División de Población de la CEPAL<br>Tel: (56-2) 210 2021; Fax: (56-2) 208 0196 - Casilla 179 D Santiago, Chile<br>Powered by <a href="http://www.cepal.org/celade/redatam/" target="_blank">REDATAM®</a></center>
+</div>
+<br/>
+<br/>
+
+</body>
+
+</html>

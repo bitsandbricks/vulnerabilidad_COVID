@@ -1,0 +1,138 @@
+---
+title: "Análisis de densidad en torno a puntos de pago"
+author: "BID - División de Desarrollo Urbano y Vivienda. Consultas: digital_cities@iadb.org"
+date: "4/9/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, echo=FALSE}
+htmltools::img(src = knitr::image_uri("img/BID_logo_small.png"), 
+               alt = 'logo', 
+               style = 'position:absolute; top:0; right:0; padding:10px;')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Objetivo
+
+Durnte la pandemia de COVID-19, es importante garantizar el acceso de la población vulnerable a asistencia pública en forma de subsidios entregados en efectivo. Para ello se organizan puntos de pago dispersos por el territorio, en general basados en comercios existentes como bancos o tiendas.
+
+Por motivos de salud pública también es de interés identificar los centros de pago que, por cubrir áreas densamente pobladas sin alternativas cercanas, puedan convertirse en puntos críticos de concentración de beneficiarios. En esos casos, para evitar la proximidad forzada de personas acumuladas en espera, deberían habilitarse puntos adicionales en las cercanías para desconcentrar la demanda.
+
+
+Realizaremos el análisis para la ciudad de Guayaquil.
+
+
+## Paquetes a utilizar para el análisis
+
+```{r}
+library(tidyverse)
+library(sf)
+library(leaflet)
+```
+
+
+## Datos de entrada
+
+### Puntos de pago con coordenadas
+
+El listado fue provisto por [AGREGAR FUENTE]
+
+```{r}
+puntos_de_pago <- read.csv("../../data/raw/puntos_de_pago/puntos_de_pago_ecuador.csv")
+
+head(puntos_de_pago)
+```
+
+### Densidad de población actualizada y con alta resolución espacial
+
+Utilizaremos los datos de [estimados demográficos para Ecuador producidos por Facebook](https://data.humdata.org/dataset/ecuador-high-resolution-population-density-maps-demographic-estimates)
+
+```{r eval=FALSE}
+url <- "https://data.humdata.org/dataset/58c3ac3f-febd-4222-8969-59c0fe0e7a0d/resource/c05a3c81-a78c-4e6c-ac05-de1316d4ba12/download/population_ecu_2018-10-01.csv.zip"
+
+zipfile <- tempfile()
+download.file(url, zipfile)
+filename <- unzip(zipfile, list = TRUE)$Name
+
+poblacion <- read_csv(unz(zipfile, filename))
+
+unlink(temp)
+
+```
+
+```{r echo=FALSE}
+# write_csv(poblacion, "~/Downloads/population_ecu_2018-10-01.csv")
+poblacion <- read_csv("~/Downloads/population_ecu_2018-10-01.csv")
+```
+
+El dataset contiene puntos definidos por pares de coordenadas en proyección Mercator, y estimados de población en torno a esa posición en 2015 y 2020, para todo Ecuador:
+
+```{r}
+head(poblacion)
+```
+
+Cada par latitud/longitud representa un área que corresponde a 1 segundo de arco de resolución (aproximadamente 30m x 30m)
+
+
+## Límites de la ciudad
+
+El polígono de las fronteras administrativas de la ciudad puede encontrarse en Nominatim: https://nominatim.openstreetmap.org/
+
+Debido a la infinidad de marcos territoriales y legales que existen en el mundo para definir las fronteras de las ciudades, en general existen varias formas de interpretar cuales son los límites de una ciudad. 
+
+Nominatim es una base de datos global de nombres propios de lugares. Al realizarse una búsqueda, por ejemplo por "Quito", se encuentran distintas entidades geográficas con ese nombre. La interfaz de Nominatim permite comparar opciones y verificar los límites en el mapa, identificando la entidad buscada. 
+```{r}
+ciudad <- "Guayaquil"
+# La posición en que aparece entre los resultados de Nominatim 
+posicion <- 1
+
+url <- URLencode(paste0("https://nominatim.openstreetmap.org/search.php?q=",
+                        ciudad, "&polygon_geojson=1&format=geojson"))
+
+destfile = paste0(tempdir(), "/limits.json")
+
+download.file(url, destfile)
+
+limites <- st_read(destfile)[posicion,]
+
+leaflet(limites) %>%
+    addProviderTiles(providers$CartoDB.Positron) %>% 
+    addPolygons() 
+
+```
+
+## Análisis
+
+### Areas de cobertura de los puntos de pago
+
+Para establecer la porción de territorio servida por cada punto de pago, dividiremos la superficie de la ciudad en _celdas de Voronoi_. La llamada "partición de Voronoi" es la subdivisión de un plano de acuerdo a la ubicación de un conjunto de sitios, donde a cada sitio le corresponde una y sólo una región o celda. Uno de los atributos de la partición de Voronoi es cada celda abarca los puntos del plano que se encuentran más cercanos a su sitio que a cualquier otro. La metodología es utilizada con frecuencia para establecer áreas de servicio o cebertura. Por ejemplo, al calcular las celdas de voronoi en torno a dos comercios que venden el mismo producto se estable el área donde residen los potenciales clientes de cada uno, asumiendo que los clientes recurrirán al punto de venta más cercano.
+
+
+
+```{r}
+puntos_de_pago_ciudad <- puntos_de_pago %>% 
+    filter(!is.na(lon), !is.na(lat)) %>% 
+    st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% st_write("/tmp/check.geojson")
+    filter(st_within(., limites, sparse = FALSE))
+```
+
+
+### Estimados demogŕaficos por área
+
+E
+En aras de la performance, primero extraemos del dataset nacional los datos que caen dentro de la bounding box de la ciudad (esta operación es muy rápida). Habiendo limitado así los puntos a clasificar, toma mucho menos tiempo verificar a que celda de la ciudad corresponde cada punto del dataset. 
+
+```{r}
+personas_mayores_quito <- personas_mayores %>% 
+  filter(between(latitude, bbox["y", "min"], bbox["y", "max"]), 
+         between(longitude, bbox["x", "min"], bbox["x", "max"])) %>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+  st_join(celdas, left = FALSE)
+    
+```
+
